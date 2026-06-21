@@ -18,6 +18,7 @@ Bienvenue sur EGO BOT 🔥
 #tirage S → carte S
 #tirage random → carte aléatoire
 #rules → règles du bot
+#verdict → verdict du combat
 #latence → test chrono`
         });
     }
