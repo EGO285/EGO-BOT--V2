@@ -1,22 +1,3 @@
-// module.exports = {
-//     command: "#latence",
-
-//     async handler(sock, m) {
-//         const from = m.key.remoteJid;
-//         const user = m.key.participant || m.key.remoteJid;
-
-//         await sock.sendMessage(from, {
-//             text: `⏱️ Début du chronomètre ⏱️ !!`,
-//             mentions: [user]
-//         });
-
-//         setTimeout(async() => {
-//             await sock.sendMessage(from, {
-//                 text: "🚨 TIME UP !!!"
-//             });
-//         }, 420000); // 7 minutes
-//     }
-// };
 const chronos = require("../chronoData");
 
 module.exports = {
@@ -25,22 +6,39 @@ module.exports = {
     async handler(sock, m) {
         const from = m.key.remoteJid;
 
-        if (chronos[from]) {
+        // =========================
+        // ⛔ déjà actif
+        // =========================
+        if (chronos.active[from]) {
             return sock.sendMessage(from, {
                 text: "⚠️ Un chronomètre est déjà en cours."
             });
         }
 
+        // =========================
+        // ▶ lancement chrono
+        // =========================
         await sock.sendMessage(from, {
-            text: "⏱️ Début du chronomètre !!\nTape #stop pour l'arrêter."
+            text: "⏱️ Début du chronomètre !!\n\n⏸ #pause | ▶ #go | ⛔ #stop"
         });
 
-        chronos[from] = setTimeout(async() => {
-            delete chronos[from];
+        const duration = 420000; // 7 min
 
+        const timeout = setTimeout(async() => {
             await sock.sendMessage(from, {
                 text: "🚨 TIME UP !!!"
             });
-        }, 420000); // 7 min
+
+            delete chronos.active[from];
+        }, duration);
+
+        // =========================
+        // 💾 STOCKAGE PRO
+        // =========================
+        chronos.active[from] = {
+            timeout,
+            remaining: duration,
+            start: Date.now()
+        };
     }
 };

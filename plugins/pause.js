@@ -1,7 +1,7 @@
 const chronos = require("../chronoData");
 
 module.exports = {
-    command: "#stop",
+    command: "#pause",
 
     async handler(sock, m) {
         const from = m.key.remoteJid;
@@ -12,13 +12,21 @@ module.exports = {
             });
         }
 
-        clearTimeout(chronos.active[from].timeout);
+        const chrono = chronos.active[from];
+
+        clearTimeout(chrono.timeout);
+
+        const elapsed = Date.now() - chrono.start;
+        const remaining = chrono.remaining - elapsed;
+
+        chronos.paused[from] = {
+            remaining: remaining > 0 ? remaining : 0
+        };
 
         delete chronos.active[from];
-        delete chronos.paused[from];
 
         return sock.sendMessage(from, {
-            text: "⏹️ Chronomètre arrêté !!"
+            text: "⏸️ Chronomètre en pause !!"
         });
     }
 };
