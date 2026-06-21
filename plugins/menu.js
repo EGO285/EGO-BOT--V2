@@ -21,6 +21,9 @@ Bienvenue sur EGO BOT 🔥
 #verdict → verdict du combat
 #duel on → lancer un duel
 #duel off → arrêter le duel
+#new → créer un compte
+#delete → supprimer un compte (admin)
+#fiche (user) → voir la fiche d'un joueur
 #historique → voir l'historique des duels
 #latence → test chrono`
         });
