@@ -19,6 +19,9 @@ Bienvenue sur EGO BOT 🔥
 #tirage random → carte aléatoire
 #rules → règles du bot
 #verdict → verdict du combat
+#duel on → lancer un duel
+#duel off → arrêter le duel
+#historique → voir l'historique des duels
 #latence → test chrono`
         });
     }
